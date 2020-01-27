@@ -6,4 +6,21 @@ The two main differences between train_sub.txt and train_full.txt are:
 
 a) train_sub.txt is a subset of train_full.txt (it has only 600 rows against the full 3900 rows).
 
-b) 
+b) In train_full.txt the gold standard labels are evenly distributed with ~600 occurrences of each letter, however in train_sub.txt the distribution is skewed with C occurring 197 times and Q only 56.
+
+Question 1.3:
+Train_noisy:
+A = 681
+C = 571
+E = 678
+G = 622
+Q = 682
+O = 666
+
+Train_full:
+A = 667
+C = 599
+E = 659
+G = 671
+Q = 667
+O = 637
