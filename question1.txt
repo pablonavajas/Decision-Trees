@@ -24,3 +24,6 @@ E = 659
 G = 671
 Q = 667
 O = 637
+
+Proportion that is different =  (681-667) + (599-571) + (678-659) + (671-622) + (682-667) + (666-637) = 154/3900 = 3.95%
+G has a changed its proportion by 49/671 = 7.3% 
