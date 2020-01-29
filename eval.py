@@ -13,6 +13,7 @@
 ##############################################################################
 
 import numpy as np
+import math
 
 
 class Evaluator(object):
@@ -52,7 +53,25 @@ class Evaluator(object):
         #######################################################################
         #                 ** TASK 3.1: COMPLETE THIS METHOD **
         #######################################################################
+
         
+        #results = np.concatenate((annotation, prediction),axis=1)
+        results = np.concatenate(annotation, prediction)
+        i = 0
+
+        while i < results.shape[0]:
+
+            idx = np.where(class_labels == results[i][0])
+            idx2 = np.where(class_labels == results[i][1])
+
+            idx_int = int(idx[0])
+            idx2_int = int(idx2[0])
+            
+            #print('The test ' + str(i) + ' had label ' + results[i][0] + ' and prediction ' + results[i][1])
+            #print('Hence, it will be stored in row ' + str(idx_int) + ' col ' + str(idx2_int))
+            
+            confusion[idx_int][idx2_int] += 1
+            i += 1
         
         return confusion
     
@@ -71,14 +90,13 @@ class Evaluator(object):
         float
             The accuracy (between 0.0 to 1.0 inclusive)
         """
-        
-        # feel free to remove this
-        accuracy = 0.0
-        
+
         #######################################################################
         #                 ** TASK 3.2: COMPLETE THIS METHOD **
         #######################################################################
-        
+        n = len(confusion)
+        accuracy = sum(confusion[i][i] for i in range(n))/np.sum(confusion)
+
         return accuracy
         
     
@@ -108,12 +126,15 @@ class Evaluator(object):
         #######################################################################
         #                 ** TASK 3.3: COMPLETE THIS METHOD **
         #######################################################################
+        n = len(confusion)
+        for i in range(n):
+            p[i] = confusion[i][i]/sum(confusion[0:, [i]])
 
         # You will also need to change this        
-        macro_p = 0
+        macro_p = np.average(p)
 
         return (p, macro_p)
-    
+
     
     def recall(self, confusion):
         """ Computes the recall score per class given a confusion matrix.
@@ -144,9 +165,21 @@ class Evaluator(object):
         #######################################################################
         
         # You will also need to change this        
-        macro_r = 0
-        
+        n = len(confusion)
+
+        for i in range(n):
+            total = sum(confusion[i])
+            r[i] = confusion[i][i] / total
+
+        for i in range(n):
+            total = sum(confusion[i])
+            r[i] = confusion[i][i] / total
+
+        macro_r = sum(r) / (i+1)
+    
         return (r, macro_r)
+
+    
     
     
     def f1_score(self, confusion):
@@ -176,10 +209,15 @@ class Evaluator(object):
         #######################################################################
         #                 ** YOUR TASK: COMPLETE THIS METHOD **
         #######################################################################
-        
-        # You will also need to change this        
-        macro_f = 0
+
+        (p, macro_p) = self.precision(confusion)
+        (r, macro_r) = self.recall(confusion)
+
+        n = len(confusion)
+        for i in range(n):
+            f[i] = 2 * p[i] * r[i] / (p[i] + r[i])
+
+        macro_f = np.average(f)
         
         return (f, macro_f)
-   
- 
+
