@@ -68,6 +68,7 @@ class DecisionTreeClassifier(object):
         #Trains the decision tree
         self.node = self.induce_decision_tree(x,y)
 
+        """ DEBUG """
         print(self.node.child1.attribute)
         print(self.node.child1.split_point)
         print(self.node.child1.label)
@@ -107,13 +108,14 @@ class DecisionTreeClassifier(object):
         # set up empty N-dimensional vector to store predicted labels 
         # feel free to change this if needed
         predictions = np.zeros((x.shape[0],), dtype=np.object)
-        
-        
+
         #######################################################################
         #                 ** TASK 2.2: COMPLETE THIS METHOD **
         #######################################################################
         
-    
+        for row in range(x.shape[0]):
+            predictions[row] = self.check_decision_tree(x[row], self.node)
+
         # remember to change this if you rename the variable
         return predictions
 
@@ -276,6 +278,19 @@ class DecisionTreeClassifier(object):
 
         return children
 
+    def check_decision_tree(self, row, node):
+        """
+        Used to run a series of attributes (given by a list called row)
+        through a decision tree starting at node.
+        """
+
+        if node.attribute != None:
+            if row[node.attribute] < node.split_point:
+                return self.check_decision_tree(row, node.child1)
+            else:
+                return self.check_decision_tree(row, node.child2)
+        else:
+            return node.label
 
 class Node:
     """
