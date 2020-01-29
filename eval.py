@@ -52,7 +52,25 @@ class Evaluator(object):
         #######################################################################
         #                 ** TASK 3.1: COMPLETE THIS METHOD **
         #######################################################################
+
         
+        results = np.concatenate((annotation, prediction),axis=1)
+
+        i = 0
+
+        while i < results.shape[0]:
+
+            idx = np.where(class_labels == results[i][0])
+            idx2 = np.where(class_labels == results[i][1])
+
+            idx_int = int(idx[0])
+            idx2_int = int(idx2[0])
+            
+            #print('The test ' + str(i) + ' had label ' + results[i][0] + ' and prediction ' + results[i][1])
+            #print('Hence, it will be stored in row ' + str(idx_int) + ' col ' + str(idx2_int))
+            
+            confusion[idx_int][idx2_int] += 1
+            i += 1
         
         return confusion
     
@@ -144,9 +162,25 @@ class Evaluator(object):
         #######################################################################
         
         # You will also need to change this        
-        macro_r = 0
+        #macro_r = 0
+
+        for i in range(0, confusion.shape[0]):
+
+            total = sum(confusion[i])
+
+            r[i] = confusion[i][i] / total
+
+        for i in range(0, confusion.shape[0]):
+
+            total = sum(confusion[i])
         
+            r[i] = confusion[i][i] / total
+
+        macro_r = sum(r) / (i+1)
+    
         return (r, macro_r)
+
+    
     
     
     def f1_score(self, confusion):
