@@ -26,7 +26,7 @@ if __name__ == "__main__":
     classifier = DecisionTreeClassifier()
     classifier = classifier.train(x, y)
 
-"""
+
     print("Loading the test set...")
     
     x_test = np.array([
@@ -67,4 +67,4 @@ if __name__ == "__main__":
     print("Macro-averaged Precision: {:.2f}".format(macro_p))
     print("Macro-averaged Recall: {:.2f}".format(macro_r))
     print("Macro-averaged F1: {:.2f}".format(macro_f))
-"""
+

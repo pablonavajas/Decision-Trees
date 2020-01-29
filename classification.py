@@ -68,6 +68,11 @@ class DecisionTreeClassifier(object):
         #Trains the decision tree
         self.node = self.induce_decision_tree(x,y)
 
+        print(self.node.child1.attribute)
+        print(self.node.child1.split_point)
+        print(self.node.child1.label)
+        print(self.node.child2.label)
+
         #Saves the model to a file. """ CHECK """
         np.save('decision_tree.npy', self.node) 
         
@@ -135,8 +140,14 @@ class DecisionTreeClassifier(object):
         else:
             #node = self.find_best_node(x, y)
             children_datasets = self.split_dataset(x, y, node)
+            
+            """ DEBUG """
+            #print("Attribute: ", node.attribute)
+            #print("Split Point: ", node.split_point)
+            #print("Children: ", children_datasets)
 
             for child_dataset in children_datasets:
+                #print("Child")
                 child_node = self.induce_decision_tree(child_dataset[0], child_dataset[1])
                 node.add_child(child_node)
             
@@ -196,9 +207,9 @@ class DecisionTreeClassifier(object):
         Returns the array of attributes and the array of labels based on the column
         to be sorted.
         """
-
-        x = x[x[:,column].argsort()]
-        y = y[x[:,column].argsort()]
+        indices = x[:,column].argsort()
+        x = x[indices]
+        y = y[indices]
 
         return x, y
 
@@ -249,8 +260,15 @@ class DecisionTreeClassifier(object):
         #Sort the attribute matrix and label matrix based on node.attribute
         x, y = self.sort(x, y, node.attribute)
 
-        sp = node.split_point
+        #print("X: ", x)
+        #print("Y: ", y)
+
+        #sp = node.split_point
+        index = np.where(x[:,node.attribute] == node.split_point)
+        sp = index[0][0]
         
+        print("Split: ", sp)
+
         #Slice the datasets according to node.split_point
         child1 = [x[:sp], y[:sp]]
         child2 = [x[sp:], y[sp:]]

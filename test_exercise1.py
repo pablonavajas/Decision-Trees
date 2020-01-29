@@ -21,9 +21,14 @@ sortedLabels = data.labels[data.attributes[:,1].argsort()]
 
 row, col = sortedArr.shape
 
+print(sortedArr[:,1])
+a = sortedArr[:,1]
+a = np.where(a == 6)
+index = a[0][0]
+print(index)
 print(sortedArr)
 print(sortedLabels)
-
+"""
 for column in range(1, col):
     print(column)
 
@@ -47,7 +52,7 @@ node = cl.Node(label = 'C')
 print(node.label)
 print(node.attribute)
 
-
+"""
 """
 point = 3
 
