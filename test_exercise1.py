@@ -7,7 +7,8 @@
 
 import test_class_exercise1 as DS
 
-data = DS.Dataset('data/simple1.txt')
+#data = DS.Dataset('data/simple1.txt')
+data = DS.Dataset('data/toy.txt')
 
 print(data.attributes)
 print(data.labels)

@@ -9,7 +9,7 @@ a) train_sub.txt is a subset of train_full.txt (it has only 600 rows against the
 b) In train_full.txt the gold standard labels are evenly distributed with ~600 occurrences of each letter, however in train_sub.txt the distribution is skewed with C occurring 197 times and Q only 56.
 
 Question 1.3:
-Train_noisy:
+train_noisy.txt:
 A = 681
 C = 571
 E = 678
@@ -17,7 +17,7 @@ G = 622
 Q = 682
 O = 666
 
-Train_full:
+train_full.txt:
 A = 667
 C = 599
 E = 659
@@ -25,5 +25,14 @@ G = 671
 Q = 667
 O = 637
 
-Proportion that is different = ((681-667) + (599-571) + (678-659) + (671-622) + (682-667) + (666-637)) / 3900 = 154/3900 = 3.95%
-G has a changed its proportion by 49/671 = 7.3%
+Proportion of labels that are different = (((681-667) + (599-571) + (678-659) + (671-622) + (682-667) + (666-637)) / 3900)*(1/2) = 77/3900 = 1.975%
+
+train_noisy.txt has the following differences from train_full.txt:
+A = +14 (+2.1%)
+C = -28 (-4.7%)
+E = +19 (+2.9%)
+G = -49 (-7.3%)
+Q = +15 (+2.2%)
+O = +29 (+4.6%)
+
+So G, C and O have a substantially larger or smaller number of examples in train_noisy.txt compared to train_full.txt
