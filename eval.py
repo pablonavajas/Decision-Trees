@@ -213,6 +213,16 @@ class Evaluator(object):
         
         # You will also need to change this        
         macro_f = 0
+
+        p, macro_p = precision(confusion)
+
+        r, macro_r = recall(confusion)
+
+        for i in range(0, confusion.shape[0]):
+        
+            r[i] = 2 * p[i] * r[i] / (p[i] + r[i])
+
+        macro_r = 2 * macro_p * macro_r / (macro_p + macro_r)
         
         return (f, macro_f)
    
