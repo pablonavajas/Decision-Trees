@@ -14,28 +14,28 @@ import math
 class DecisionTreeClassifier(object):
     """
     A decision tree classifier
-    
+
     Attributes
     ----------
     is_trained : bool
         Keeps track of whether the classifier has been trained
-    
+
     Methods
     -------
     train(X, y)
         Constructs a decision tree from data X and label y
     predict(X)
         Predicts the class label of samples X
-    
+
     """
 
     def __init__(self):
         self.is_trained = False
         self.node = None
-    
+
     def train(self, x, y):
         """ Constructs a decision tree classifier from data
-        
+
         Parameters
         ----------
         x : numpy.array
@@ -43,68 +43,68 @@ class DecisionTreeClassifier(object):
             number of attributes)
         y : numpy.array
             An N-dimensional numpy array
-        
+
         Returns
         -------
         DecisionTreeClassifier
             A copy of the DecisionTreeClassifier instance
-        
+
         """
-        
+
         # Make sure that x and y have the same number of instances
         assert x.shape[0] == len(y), \
-            "Training failed. x and y must have the same number of instances."
+                "Training failed. x and y must have the same number of instances."
 
         #######################################################################
         #                 ** TASK 2.1: COMPLETE THIS METHOD **
         #######################################################################
-      
+
         """ TEST
         node = self.find_best_node(x,y) 
         print(node.attribute)
         print(node.split_point)
         """
-    
+
         #Trains the decision tree
         self.node = self.induce_decision_tree(x,y)
 
         """ DEBUG """
-        print(self.node.child1.attribute)
-        print(self.node.child1.split_point)
-        print(self.node.child1.label)
-        print(self.node.child2.label)
+        #print(self.node.child1.attribute)
+        #print(self.node.child1.split_point)
+        #print(self.node.child1.label)
+        #print(self.node.child2.label)
 
         #Saves the model to a file. """ CHECK """
         np.save('decision_tree.npy', self.node) 
-        
+
         # set a flag so that we know that the classifier has been trained
         self.is_trained = True
-        
+
         return self
-    
-    
+
+
     def predict(self, x):
         """ Predicts a set of samples using the trained DecisionTreeClassifier.
-        
+
         Assumes that the DecisionTreeClassifier has already been trained.
-        
+
         Parameters
         ----------
         x : numpy.array
             An N by K numpy array (N is the number of samples, K is the 
             number of attributes)
-        
+
         Returns
         -------
         numpy.array
             An N-dimensional numpy array containing the predicted class label
             for each instance in x
         """
-        
+
         # make sure that classifier has been trained before predicting
         if not self.is_trained:
             raise Exception("Decision Tree classifier has not yet been trained.")
-        
+
         # set up empty N-dimensional vector to store predicted labels 
         # feel free to change this if needed
         predictions = np.zeros((x.shape[0],), dtype=np.object)
@@ -112,7 +112,7 @@ class DecisionTreeClassifier(object):
         #######################################################################
         #                 ** TASK 2.2: COMPLETE THIS METHOD **
         #######################################################################
-        
+
         for row in range(x.shape[0]):
             predictions[row] = self.check_decision_tree(x[row], self.node)
 
@@ -138,11 +138,12 @@ class DecisionTreeClassifier(object):
         #if all samples have the same label or there is no information to be 
         #gained by splitting
         if unique.size == 1 or node.info_gain == 0:
-            return Node(label = unique[0])
+            #return Node(label = unique[0])
+            return Node(label = unique[0], dictionary = node.dictionary, info_gain = node.info_gain)
         else:
             #node = self.find_best_node(x, y)
             children_datasets = self.split_dataset(x, y, node)
-            
+
             """ DEBUG """
             #print("Attribute: ", node.attribute)
             #print("Split Point: ", node.split_point)
@@ -152,9 +153,9 @@ class DecisionTreeClassifier(object):
                 #print("Child")
                 child_node = self.induce_decision_tree(child_dataset[0], child_dataset[1])
                 node.add_child(child_node)
-            
+
             return node
-        
+
 
     def find_best_node(self, x, y):
         """
@@ -165,13 +166,14 @@ class DecisionTreeClassifier(object):
 
         #initialise variables which store max info gain and
         #the attribute and split point
-        max_information_gain = -1
+        #max_information_gain = -1
+        max_information_gain = 0
         attribute = -1
         split_point = -1
-        
+
         #get the size of the array x
         row_size, column_size = x.shape
-        
+
         #loop through each column of X
         for col in range(column_size):
 
@@ -199,9 +201,13 @@ class DecisionTreeClassifier(object):
                         attribute = col
                         split_point = x[row,col]
 
+        unique, counts = np.unique(y, return_counts = True)
+        dictionary = dict(zip(unique, counts))
+
         #create node with attribute and value of max info_gain
-        node = Node(attribute, split_point, max_information_gain)
-        
+        #node = Node(attribute, split_point, max_information_gain)
+        node = Node(attribute, split_point, max_information_gain, dictionary)
+
         return node
 
     def sort(self, x, y, column):
@@ -223,7 +229,7 @@ class DecisionTreeClassifier(object):
 
         #total number of samples in the parent
         N = (parent.shape)[0] 
-       
+
         #calculate the entropy of the parent
         h_parent = self.entropy(parent)
 
@@ -234,7 +240,7 @@ class DecisionTreeClassifier(object):
 
         return h_parent - h_bar_children
 
-        
+
     def entropy(self, dataset):
         """
         Calculates the entropy for a given dataset.
@@ -242,7 +248,7 @@ class DecisionTreeClassifier(object):
 
         #obtain the counts of each unique label
         unique, counts = np.unique(dataset, return_counts = True)
-       
+
         #obtain an array of probabilities for each label
         total = sum(counts)
         probability = [i/total for i in counts]
@@ -262,14 +268,23 @@ class DecisionTreeClassifier(object):
         #Sort the attribute matrix and label matrix based on node.attribute
         x, y = self.sort(x, y, node.attribute)
 
-        #print("X: ", x)
-        #print("Y: ", y)
+        """ DEBUG 
+        print("X: ", x)
+        print("Y: ", y)
+        print("Attribute: ", node.attribute)
+        print("Split Point: ", node.split_point)
+        """
 
         #sp = node.split_point
         index = np.where(x[:,node.attribute] == node.split_point)
+
+        """ DEBUG """
+        #print(index)
+
         sp = index[0][0]
-        
-        print("Split: ", sp)
+
+        """ DEBUG """ 
+        #print("Split: ", sp)
 
         #Slice the datasets according to node.split_point
         child1 = [x[:sp], y[:sp]]
@@ -292,6 +307,24 @@ class DecisionTreeClassifier(object):
         else:
             return node.label
 
+    def print_decision_tree(self, node, num = 0):
+        """
+        Used to print a text-based visualisation of a decision tree.
+        """
+            
+        if node.attribute != None:
+            print("+---", "Attribute_" + str(node.attribute) + " < " + str(node.split_point), "(IG = " + str(round(node.info_gain, 4)) + " and Class Distribution = " + str(node.dictionary) + ")")
+            print(" "*4*(num+1), end = "")
+            self.print_decision_tree(node.child1, num+1)
+            print(" "*4*(num+1), end = "")
+            self.print_decision_tree(node.child2, num+1)
+        else:
+            #print("+---", "Leaf", node.label)
+             print("+---", "Leaf", node.label, "(Class Distribution = " + str(node.dictionary) + ")")
+
+        return self
+
+
 class Node:
     """
     A Node object has the following data members:
@@ -304,12 +337,14 @@ class Node:
     It also has the add_child() method, which associates a child node with its parent
     """
 
-    def __init__(self, attribute = None, split_point = None, info_gain = None, label = None):
+    #def __init__(self, attribute = None, split_point = None, info_gain = None, label = None):
+    def __init__(self, attribute = None, split_point = None, info_gain = None, dictionary = None, label = None):
         #column
         self.attribute = attribute
         #row
         self.split_point = split_point
         self.info_gain = info_gain
+        self.dictionary = dictionary
         self.label = label
         self.child1 = None
         self.child2 = None

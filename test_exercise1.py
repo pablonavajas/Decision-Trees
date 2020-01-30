@@ -20,6 +20,10 @@ sortedArr = data.attributes[data.attributes[:,1].argsort()]
 sortedLabels = data.labels[data.attributes[:,1].argsort()]
 
 row, col = sortedArr.shape
+"""
+print("+---", "Attribute", 1, "<", 6)
+print("    ", end = "")
+print("+---", "Attribute", 1, "<", 6)
 
 print(sortedArr[:,1])
 a = sortedArr[:,1]
@@ -28,18 +32,23 @@ index = a[0][0]
 print(index)
 print(sortedArr)
 print(sortedLabels)
-"""
+
+
 for column in range(1, col):
     print(column)
 
 
 print((sortedArr.shape)[0])
-
+"""
 unique, counts = np.unique(sortedLabels, return_counts = True)
 print(np.unique(sortedLabels, return_counts = True))
-print(unique.size)
-print(unique[0])
+
+
+print(unique)
 print(counts)
+dictionary = dict(zip(unique, counts))
+print(dictionary)
+"""
 total = sum(counts)
 #probability = [i/total for i in counts]
 #term = [i*math.log(i,2) for i in probability]

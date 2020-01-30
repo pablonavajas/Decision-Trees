@@ -26,6 +26,7 @@ if __name__ == "__main__":
     classifier = DecisionTreeClassifier()
     classifier = classifier.train(x, y)
 
+    classifier.print_decision_tree(classifier.node)
 
     print("Loading the test set...")
     
