@@ -1,0 +1,8 @@
+Question 2.1: (see train_full_tree.txt)
+The first split rule is for Attribute 10 to be less than 3. 
+It makes sense for this attribute to be the first split because the Information Gain by splitting the
+dataset into two child datasets in this way is approximately 0.5 (it is 0.4309 to 4dp) - using this
+split we are roughly reducing our overall "surprise" by half.
+
+### Also comment on and discuss about any other split rules/attributes in the tree ###
+TODO!!

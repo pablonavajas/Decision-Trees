@@ -139,7 +139,14 @@ class DecisionTreeClassifier(object):
         #gained by splitting
         if unique.size == 1 or node.info_gain == 0:
             #return Node(label = unique[0])
-            return Node(label = unique[0], dictionary = node.dictionary, info_gain = node.info_gain)
+            ##return Node(label = unique[0], dictionary = node.dictionary, info_gain = node.info_gain)
+            l = max(node.dictionary, key = node.dictionary.get)
+            """DEBUG"""
+            #print(l)
+            #print(node.attribute)
+            #print(x)
+            #print(y)
+            return Node(label = l, dictionary = node.dictionary, info_gain = node.info_gain)
         else:
             #node = self.find_best_node(x, y)
             children_datasets = self.split_dataset(x, y, node)
@@ -168,8 +175,9 @@ class DecisionTreeClassifier(object):
         #the attribute and split point
         #max_information_gain = -1
         max_information_gain = 0
-        attribute = -1
-        split_point = -1
+        #attribute = -1
+        attribute = None
+        split_point = None
 
         #get the size of the array x
         row_size, column_size = x.shape
@@ -320,7 +328,8 @@ class DecisionTreeClassifier(object):
             self.print_decision_tree(node.child2, num+1)
         else:
             #print("+---", "Leaf", node.label)
-             print("+---", "Leaf", node.label, "(Class Distribution = " + str(node.dictionary) + ")")
+            #print("+---", "Leaf", node.label, "(Class Distribution = " + str(node.dictionary) + ")")
+            print("+---", "Leaf", node.label, "(IG = " + str(round(node.info_gain, 4)) + " and Class Distribution = " + str(node.dictionary) + ")")
 
         return self
 
