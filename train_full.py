@@ -7,6 +7,7 @@
 import numpy as np
 from classification import DecisionTreeClassifier
 from eval import Evaluator
+from eval import CrossValidator
 from test_class_exercise1 import Dataset
 
 if __name__ == "__main__":
@@ -22,3 +23,9 @@ if __name__ == "__main__":
 
     print("Visualisation of the Decision Tree ...")
     classifier.print_decision_tree(classifier.node)
+
+    print("Performing cross-validation...")
+    cv = CrossValidator()
+    accuracy = cv.run(dataset, 10)
+    print(accuracy)
+
