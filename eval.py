@@ -53,9 +53,8 @@ class Evaluator(object):
         #######################################################################
 
         # validate inputs
-        if len(prediction) != len(annotation):
-            raise Exception('Number of labels in the predicted class not equal to number of labels in the ground '
-                            'truth class')
+        assert len(prediction) == len(annotation), \
+            "Number of labels in the predicted class not equal to number of labels in the ground truth class"
 
         results = np.vstack((annotation, prediction)).T
 

@@ -46,8 +46,8 @@ if __name__ == "__main__":
     
     print("Evaluating test predictions...")
     evaluator = Evaluator()
-    #confusion = evaluator.confusion_matrix(predictions, y_test)
-    confusion = np.array([[3, 1], [2, 2]])
+    confusion = evaluator.confusion_matrix(predictions, y_test)
+    #confusion = np.array([[3, 1], [2, 2]])
 
     print("Confusion matrix:")
     print(confusion)
