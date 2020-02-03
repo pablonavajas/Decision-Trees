@@ -24,6 +24,9 @@ if __name__ == "__main__":
     print("Visualisation of the Decision Tree ...")
     classifier.print_decision_tree(classifier.node)
 
+    #######################################################################
+    #               ** QUESTION 3.3: COMPLETE THIS METHOD **
+    #######################################################################
     print("Performing cross-validation...")
     cv = CrossValidator()
     accuracy = cv.run(dataset, 10)
