@@ -32,3 +32,12 @@ if __name__ == "__main__":
     accuracy = cv.run(dataset, 10)
     print(accuracy)
 
+    """
+    Testing Prune function
+    """
+
+    validation = Dataset("data/validation.txt")
+    print("Pruning the Tree")
+    classifier.prune(validation.attributes, validation.labels) 
+
+    classifier.print_decision_tree(classifier.node)

@@ -22,3 +22,14 @@ if __name__ == "__main__":
 
     print("Visualisation of the Decision Tree ...")
     classifier.print_decision_tree(classifier.node)
+
+    """
+    Testing Prune function
+    """
+
+    validation = Dataset("data/validation.txt")
+    print("Pruning the Tree")
+    classifier.prune(classifier.node, validation.attributes, validation.labels) 
+
+    classifier.print_decision_tree(classifier.node)
+

@@ -13,7 +13,8 @@
 ##############################################################################
 
 import numpy as np
-from classification import DecisionTreeClassifier
+#from classification import DecisionTreeClassifier
+import classification
 import random
 
 class Evaluator(object):
@@ -266,7 +267,8 @@ class CrossValidator(object):
             validation_labels, train_labels = self._split_dataset(labels, k_folds, fold)
 
             # training the decision tree
-            classifier = DecisionTreeClassifier()
+            #classifier = DecisionTreeClassifier()
+            classifier = classification.DecisionTreeClassifier()
             classifier = classifier.train(train_attributes, train_labels)
 
             # get predictions based on the training
