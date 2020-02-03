@@ -224,7 +224,7 @@ class CrossValidator(object):
             "Number of labels in the predicted class not equal to number of labels in the ground truth class"
 
     # function to split the dataset (private)
-    def _split_dataset(self, dataset, k_folds, random_fold):
+    def _split_dataset(self, dataset, k_folds, validation_fold):
 
         # get nr or rows of the dataset
         rows = len(dataset)
@@ -233,8 +233,8 @@ class CrossValidator(object):
         validation_set_len = rows // k_folds
 
         # get lower limit and upper limit for validation set rows
-        split_row_1 = (validation_set_len) * random_fold
-        split_row_2 = (validation_set_len) * (random_fold + 1)
+        split_row_1 = (validation_set_len) * validation_fold
+        split_row_2 = (validation_set_len) * (validation_fold + 1)
 
         # extract validation set from dataset
         validation_set = dataset[split_row_1:split_row_2]
@@ -253,12 +253,17 @@ class CrossValidator(object):
         # initialise an array for accuracies
         accuracy_array = np.empty(0);
 
+        # shuffle the dataset
+        s = np.arange(dataset.labels.shape[0])
+        np.random.shuffle(s)
+        attributes = dataset.attributes[s]
+        labels = dataset.labels[s]
+
         # randomly split the data into k subsets and get validation performance
         for fold in range(k_folds - 1):
-            random_fold = random.randint(0, k_folds - 1) # 0-based
 
-            validation_attributes, train_attributes = self._split_dataset(dataset.attributes, k_folds, random_fold)
-            validation_labels, train_labels = self._split_dataset(dataset.labels, k_folds, random_fold)
+            validation_attributes, train_attributes = self._split_dataset(attributes, k_folds, fold)
+            validation_labels, train_labels = self._split_dataset(labels, k_folds, fold)
 
             # training the decision tree
             classifier = DecisionTreeClassifier()
@@ -269,7 +274,7 @@ class CrossValidator(object):
 
             # evaluation initialiser
             evaluator = Evaluator()
-            classes = np.unique(dataset.labels);
+            classes = np.unique(labels);
 
             # build confusion matrix
             confusion = evaluator.confusion_matrix(predictions, validation_labels, classes)
