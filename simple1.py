@@ -4,9 +4,8 @@
 # Prepared by: EPC
 ##############################################################################
 
-import numpy as np
+
 from classification import DecisionTreeClassifier
-from eval import Evaluator
 from readData import Dataset
 
 if __name__ == "__main__":
