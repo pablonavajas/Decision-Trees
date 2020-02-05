@@ -7,7 +7,7 @@
 import numpy as np
 from classification import DecisionTreeClassifier
 from eval import Evaluator
-from test_class_exercise1 import Dataset
+from readData import Dataset
 
 if __name__ == "__main__":
     print("Training " + "data/toy.txt ...")
