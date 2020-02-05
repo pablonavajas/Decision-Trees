@@ -8,14 +8,18 @@ import numpy as np
 from classification import DecisionTreeClassifier
 from eval import Evaluator
 from CrossValidator import CrossValidator
-from test_class_exercise1 import Dataset
+from readData import Dataset
+import sys
 
 if __name__ == "__main__":
     print("Training " + "data/train_full.txt ...")
+    #print("Training " + sys.argv[1])
 
     print("Loading the training dataset")
    
     dataset = Dataset("data/train_full.txt")
+    #dataset = Dataset(sys.argv[1])
+    
 
     print("Training the decision tree ...");
     classifier = DecisionTreeClassifier()
@@ -25,20 +29,12 @@ if __name__ == "__main__":
     classifier.print_decision_tree(classifier.node)
 
     #######################################################################
-    #         ** QUESTION 4.1: COMBINE PREDICTIONS OF 10 TREES **
-    #######################################################################
-    validation = Dataset("data/validation.txt")
-    print("Pruning the Tree")
-    classifier.prune(validation.attributes, validation.labels)
-
-    classifier.print_decision_tree(classifier.node)
-
-    #######################################################################
     #               ** QUESTION 3.3: COMPLETE THIS METHOD **
     #######################################################################
     print("Performing cross-validation...")
+    k = 10
     cv = CrossValidator()
-    cross_validation_output = cv.run(dataset, 5)
+    cross_validation_output = cv.run(dataset, k)
     cv.print_evaluation_params(cross_validation_output[1])
 
     #######################################################################
@@ -85,9 +81,10 @@ if __name__ == "__main__":
     print("\n\nQUESTION 3.5: COMBINED PREDICTIONS OF CLASSIFIERS TRAINED ON SUBSET OF DATA")
 
     # combine predictions from all 10 trees into one array called predictions
-    predictions_combined = np.asarray(cross_validation_output[0][0].predict(test_dataset.attributes))
-    for i in range(1, 5):
-        predictions_combined = np.vstack((predictions, np.asarray(cross_validation_output[0][i].predict(test_dataset.attributes))))
+    predictions_combined = [cross_validation_output[0][0].predict(test_dataset.attributes)]
+    for i in range(1, k):
+        predictions_combined = np.append(predictions_combined,
+                      [cross_validation_output[0][i].predict(test_dataset.attributes)], axis=0)
 
     # get mode of those predictions across 10 trees
     predictions_combined_mode = cv.mode_2d(predictions_combined)
@@ -96,4 +93,13 @@ if __name__ == "__main__":
     evaluator = Evaluator()
     confusion = evaluator.confusion_matrix(predictions_combined_mode, test_dataset.labels)
     evaluator.print_four_eval_metrics(confusion)
+
+    #######################################################################
+    #         ** QUESTION 4.1: COMBINE PREDICTIONS OF 10 TREES **
+    #######################################################################
+    validation = Dataset("data/validation.txt")
+    print("Pruning the Tree")
+    classifier.prune(validation.attributes, validation.labels)
+
+    #classifier.print_decision_tree(classifier.node)
 
