@@ -228,6 +228,15 @@ class Evaluator(object):
         print("Recall   : %.10f" % self.recall(confusion)[1])
         print("F1 Score : %.10f" % self.f1_score(confusion)[1])
 
+    def print_three_class_metrics(self, confusion):
+
+        print("\nPrecision:")
+        print(self.precision(confusion)[0])
+        print("\nRecall   :")
+        print(self.recall(confusion)[0])
+        print("\nF1 Score :")
+        print(self.f1_score(confusion)[0])
+
 
 
 
