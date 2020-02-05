@@ -326,7 +326,7 @@ class DecisionTreeClassifier(object):
 
             # if both are leaves do the pruning
             if cond1 and cond2:
-                pre_accuracy = self.tree_accuracy(x,y)
+                pre_accuracy = self.tree_accuracy(x, y)
 
                 l = max(node.dictionary, key=node.dictionary.get)
                 node.label = l
@@ -339,7 +339,8 @@ class DecisionTreeClassifier(object):
                 node.split_point = None
 
                 post_accuracy = self.tree_accuracy(x, y)
-                if post_accuracy > pre_accuracy:
+
+                if post_accuracy >= pre_accuracy:
                     return True
                 #if accuracy not improved
                 else:

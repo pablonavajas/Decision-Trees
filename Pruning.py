@@ -41,6 +41,7 @@ print(" \n====== TESTING OF train_noisy.txt CLASSIFIER on test.txt ======")
 
 # open train dataset
 train_noisy = Dataset("data/train_noisy.txt")
+
 classifier_noisy = DecisionTreeClassifier()
 classifier_noisy = classifier_noisy.train(train_noisy.attributes, train_noisy.labels)
 
@@ -58,3 +59,6 @@ print("\nEvaluation of train_noisy.txt model on test.txt AFTER pruning: ")
 predictions = pruned_classifier_noisy.predict(test.attributes)
 confusion = evaluator.confusion_matrix(predictions, test.labels)
 evaluator.print_four_eval_metrics(confusion)
+
+
+print("\n\n")
