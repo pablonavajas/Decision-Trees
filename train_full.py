@@ -25,20 +25,11 @@ if __name__ == "__main__":
     classifier.print_decision_tree(classifier.node)
 
     #######################################################################
-    #         ** QUESTION 4.1: COMBINE PREDICTIONS OF 10 TREES **
-    #######################################################################
-    validation = Dataset("data/validation.txt")
-    print("Pruning the Tree")
-    classifier.prune(validation.attributes, validation.labels)
-
-    classifier.print_decision_tree(classifier.node)
-
-    #######################################################################
     #               ** QUESTION 3.3: COMPLETE THIS METHOD **
     #######################################################################
     print("Performing cross-validation...")
     cv = CrossValidator()
-    cross_validation_output = cv.run(dataset, 5)
+    cross_validation_output = cv.run(dataset, 10)
     cv.print_evaluation_params(cross_validation_output[1])
 
     #######################################################################
@@ -96,4 +87,13 @@ if __name__ == "__main__":
     evaluator = Evaluator()
     confusion = evaluator.confusion_matrix(predictions_combined_mode, test_dataset.labels)
     evaluator.print_four_eval_metrics(confusion)
+
+    #######################################################################
+    #         ** QUESTION 4.1: COMBINE PREDICTIONS OF 10 TREES **
+    #######################################################################
+    validation = Dataset("data/validation.txt")
+    print("Pruning the Tree")
+    classifier.prune(validation.attributes, validation.labels)
+
+    #classifier.print_decision_tree(classifier.node)
 
