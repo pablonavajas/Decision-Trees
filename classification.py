@@ -297,7 +297,7 @@ class DecisionTreeClassifier(object):
         """
         A function that is used to prune a decision tree.
         """
-        self.prune_helper(self.node,x,y)
+        self.prune_helper(self.node, x, y)
         return self
 
         #######################################################################
@@ -309,12 +309,26 @@ class DecisionTreeClassifier(object):
         Helper function to prune a decision tree.
         """
 
+        #if node is a leaf
         if node.label != None:
             return True
         else:
-            if self.prune_helper(node.child1, x, y) and self.prune_helper(node.child2, x, y):
+
+            #checking if both child nodes are leaves
+            cond1 = False
+            cond2 = False
+
+            if self.prune_helper(node.child1, x, y):
+                cond1 = True
+
+            if self.prune_helper(node.child2, x, y):
+                cond2 = True
+
+            # if both are leaves do the pruning
+            if cond1 and cond2:
                 pre_accuracy = self.tree_accuracy(x,y)
-                l = max(node.dictionary, key = node.dictionary.get)
+
+                l = max(node.dictionary, key=node.dictionary.get)
                 node.label = l
 
                 children = [node.child1, node.child2]
@@ -324,10 +338,10 @@ class DecisionTreeClassifier(object):
                 node.attribute = None
                 node.split_point = None
 
-                post_accuracy = self.tree_accuracy(x,y)
-
-                if post_accuracy >= pre_accuracy:
+                post_accuracy = self.tree_accuracy(x, y)
+                if post_accuracy > pre_accuracy:
                     return True
+                #if accuracy not improved
                 else:
                     node.child1 = children[0]
                     node.child2 = children[1]
@@ -335,7 +349,7 @@ class DecisionTreeClassifier(object):
                     node.attribute = store[0]
                     node.split_point = store[1]
 
-        return False
+            return False
 
     def tree_accuracy(self, x, y):
         predictions = self.predict(x)
