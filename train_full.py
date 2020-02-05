@@ -7,7 +7,7 @@
 import numpy as np
 from classification import DecisionTreeClassifier
 from eval import Evaluator
-from eval import CrossValidator
+from CrossValidator import CrossValidator
 from test_class_exercise1 import Dataset
 
 if __name__ == "__main__":
@@ -22,6 +22,15 @@ if __name__ == "__main__":
     classifier = classifier.train(dataset.attributes, dataset.labels)
 
     print("Visualisation of the Decision Tree ...")
+    classifier.print_decision_tree(classifier.node)
+
+    #######################################################################
+    #         ** QUESTION 4.1: COMBINE PREDICTIONS OF 10 TREES **
+    #######################################################################
+    validation = Dataset("data/validation.txt")
+    print("Pruning the Tree")
+    classifier.prune(validation.attributes, validation.labels)
+
     classifier.print_decision_tree(classifier.node)
 
     #######################################################################
@@ -87,9 +96,4 @@ if __name__ == "__main__":
     evaluator = Evaluator()
     confusion = evaluator.confusion_matrix(predictions_combined_mode, test_dataset.labels)
     evaluator.print_four_eval_metrics(confusion)
-
-
-
-
-
 
