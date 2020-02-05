@@ -9,7 +9,7 @@
 
 import numpy as np
 import math
-
+import eval
 
 class DecisionTreeClassifier(object):
     """
@@ -119,11 +119,13 @@ class DecisionTreeClassifier(object):
         # remember to change this if you rename the variable
         return predictions
 
+
         #######################################################################
-        #                 ** HELPER FUNCTIONS **
+        #                 ** HELPER FUNCTIONS Q2 **
         #######################################################################
 
-    def induce_decision_tree(self, x, y):
+    #def induce_decision_tree(self, x, y):
+    def induce_decision_tree(self, x, y, dep = 0):
         """
         Implementation of Algorithm 1 - Decision Tree Induction
         Returns the root node of the decision tree.
@@ -133,7 +135,8 @@ class DecisionTreeClassifier(object):
         #array of unique labels
         unique = np.unique(y)
         #find the best node (will test for info_gain next)
-        node = self.find_best_node(x, y)
+        #node = self.find_best_node(x, y)
+        node = self.find_best_node(x, y, dep)
 
         #if all samples have the same label or there is no information to be 
         #gained by splitting
@@ -146,7 +149,8 @@ class DecisionTreeClassifier(object):
             #print(node.attribute)
             #print(x)
             #print(y)
-            return Node(label = l, dictionary = node.dictionary, info_gain = node.info_gain)
+            #return Node(label = l, dictionary = node.dictionary, info_gain = node.info_gain)
+            return Node(label = l, dictionary = node.dictionary, info_gain = node.info_gain, depth = node.depth)
         else:
             #node = self.find_best_node(x, y)
             children_datasets = self.split_dataset(x, y, node)
@@ -158,13 +162,14 @@ class DecisionTreeClassifier(object):
 
             for child_dataset in children_datasets:
                 #print("Child")
-                child_node = self.induce_decision_tree(child_dataset[0], child_dataset[1])
+                #child_node = self.induce_decision_tree(child_dataset[0], child_dataset[1])
+                child_node = self.induce_decision_tree(child_dataset[0], child_dataset[1], dep + 1)
                 node.add_child(child_node)
 
             return node
 
-
-    def find_best_node(self, x, y):
+    #def find_best_node(self, x, y):
+    def find_best_node(self, x, y, depth):
         """
         Returns the best node based on x: an NxK NumPy array representing N training
         instances of K attributes and y: an N-dim NumPy array containing the class label
@@ -214,7 +219,8 @@ class DecisionTreeClassifier(object):
 
         #create node with attribute and value of max info_gain
         #node = Node(attribute, split_point, max_information_gain)
-        node = Node(attribute, split_point, max_information_gain, dictionary)
+        #node = Node(attribute, split_point, max_information_gain, dictionary)
+        node = Node(attribute, split_point, max_information_gain, dictionary, depth)
 
         return node
 
@@ -321,7 +327,7 @@ class DecisionTreeClassifier(object):
         """
             
         if node.attribute != None:
-            print("+---", "Attribute_" + str(node.attribute) + " < " + str(node.split_point), "(IG = " + str(round(node.info_gain, 4)) + " and Class Distribution = " + str(node.dictionary) + ")")
+            print("+---", "Attribute_" + str(node.attribute) + " < " + str(node.split_point), "(IG = " + str(round(node.info_gain, 4)) + " and Class Distribution = " + str(node.dictionary) + " and Depth = " + str(node.depth) + ")")
             print(" "*4*(num+1), end = "")
             self.print_decision_tree(node.child1, num+1)
             print(" "*4*(num+1), end = "")
@@ -329,10 +335,56 @@ class DecisionTreeClassifier(object):
         else:
             #print("+---", "Leaf", node.label)
             #print("+---", "Leaf", node.label, "(Class Distribution = " + str(node.dictionary) + ")")
-            print("+---", "Leaf", node.label, "(IG = " + str(round(node.info_gain, 4)) + " and Class Distribution = " + str(node.dictionary) + ")")
+            print("+---", "Leaf", node.label, "(IG = " + str(round(node.info_gain, 4)) + " and Class Distribution = " + str(node.dictionary) + " and Depth = " + str(node.depth) + ")") 
 
         return self
 
+        #######################################################################
+        #                 ** TASK 4.1: COMPLETE THIS METHOD **
+        #######################################################################
+
+    def prune(self, x, y):
+        self.prune_helper(self.node,x,y)
+        return self
+
+        #######################################################################
+        #                 ** HELPER FUNCTIONS Q4 **
+        #######################################################################
+
+    def prune_helper(self, node, x, y):
+        if node.label != None:
+            return True
+        else:
+            if self.prune_helper(node.child1, x, y) and self.prune_helper(node.child2, x, y):
+                pre_accuracy = self.tree_accuracy(x,y)
+                l = max(node.dictionary, key = node.dictionary.get)
+                node.label = l
+
+                children = [node.child1, node.child2]
+                store = [node.attribute, node.split_point]
+                node.child1 = None
+                node.child2 = None
+                node.attribute = None
+                node.split_point = None
+
+                post_accuracy = self.tree_accuracy(x,y)
+
+                if post_accuracy >= pre_accuracy:
+                    return True
+                else:
+                    node.child1 = children[0]
+                    node.child2 = children[1]
+                    node.label = None
+                    node.attribute = store[0]
+                    node.split_point = store[1]
+
+        return False
+
+    def tree_accuracy(self, x, y):
+        predictions = self.predict(x)
+        evaluator = eval.Evaluator()
+        confusion = evaluator.confusion_matrix(predictions, y)
+        return evaluator.accuracy(confusion)
 
 class Node:
     """
@@ -347,16 +399,21 @@ class Node:
     """
 
     #def __init__(self, attribute = None, split_point = None, info_gain = None, label = None):
-    def __init__(self, attribute = None, split_point = None, info_gain = None, dictionary = None, label = None):
+    #def __init__(self, attribute = None, split_point = None, info_gain = None, dictionary = None, label = None):
+    #def __init__(self, attribute = None, split_point = None, info_gain = None, dictionary = None, depth = None, label = None):
+    def __init__(self, attribute = None, split_point = None, info_gain = None, dictionary = None, depth = None, label = None, child1 = None, child2 = None):
         #column
         self.attribute = attribute
         #row
         self.split_point = split_point
         self.info_gain = info_gain
         self.dictionary = dictionary
+        self.depth = depth
         self.label = label
-        self.child1 = None
-        self.child2 = None
+        #self.child1 = None
+        #self.child2 = None
+        self.child1 = child1
+        self.child2 = child2
 
     def add_child(self, child_node):
         if self.child1 == None:
