@@ -8,7 +8,7 @@ validation = Dataset("data/validation.txt")
 test = Dataset("data/test.txt")
 
 #######################################################################
-#                       ** QUESTION 4.1: **                           #
+#         ** QUESTION 4.1: PRUNING on full and noisy datasets**       #
 #######################################################################
 print("====================================================================")
 print("========================= QUESTION 4.1 =============================")
@@ -73,9 +73,7 @@ predictions = pruned_classifier_noisy.predict(test.attributes)
 confusion = evaluator.confusion_matrix(predictions, test.labels)
 evaluator.print_four_eval_metrics(confusion)
 
-
 print("\n\n")
-
 
 #######################################################################
 #                       ** QUESTION 4.2: **                           #

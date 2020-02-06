@@ -155,7 +155,7 @@ class CrossValidator(object):
             else:
                 row_label = "Max Value      "
 
-            print(" %s   %.5f     %.5f      %.5f   %.5f" % (row_label, eval_data_frame[row][0],
+            print(" %s   %.3f     %.3f      %.3f   %.3f" % (row_label, eval_data_frame[row][0],
                      eval_data_frame[row][1], eval_data_frame[row][2], eval_data_frame[row][3]))
 
     def mode_2d(self, array_n_x_k):

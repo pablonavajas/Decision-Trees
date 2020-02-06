@@ -223,10 +223,10 @@ class Evaluator(object):
         return (f, macro_f)
 
     def print_four_eval_metrics(self, confusion):
-        print("Accuracy : %.5f" % self.accuracy(confusion))
-        print("Precision: %.5f" % self.precision(confusion)[1])
-        print("Recall   : %.5f" % self.recall(confusion)[1])
-        print("F1 Score : %.5f" % self.f1_score(confusion)[1])
+        print("Accuracy : %.3f" % self.accuracy(confusion))
+        print("Precision: %.3f" % self.precision(confusion)[1])
+        print("Recall   : %.3f" % self.recall(confusion)[1])
+        print("F1 Score : %.3f" % self.f1_score(confusion)[1])
 
     def print_three_class_metrics(self, confusion):
 
