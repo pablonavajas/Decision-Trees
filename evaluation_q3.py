@@ -8,12 +8,12 @@ import numpy as np
 from classification import DecisionTreeClassifier
 from eval import Evaluator
 from CrossValidator import CrossValidator
-from test_class_exercise1 import Dataset
+from readData import Dataset
 
 if __name__ == "__main__":
 
     #######################################################################
-    #               ** QUESTION 3.1: COMPLETE THIS METHOD **              #
+    #                        ** QUESTION 3.1 **                           #
     #######################################################################
 
     print("\n\nQUESTION 3.1: Train Test.txt in three separate decision trees: ")
@@ -23,9 +23,7 @@ if __name__ == "__main__":
     test_labels = np.unique(test_dataset.labels)
 
     
-    ##############################################
-    #            TRAIN_FULL.TXT                  #
-    ##############################################
+    ############# TRAIN_FULL.TXT ###################
     
     print("\n\nA. train_full.txt DECISION TREE:")
     
@@ -56,9 +54,7 @@ if __name__ == "__main__":
     print("\nEvaluation Macro Parameters:")
     full_evaluator.print_four_eval_metrics(full_confusion)
 
-    ##############################################
-    #            TRAIN_SUB.TXT                   #
-    ##############################################
+    ############# TRAIN_SUB.TXT ####################
     
     print("\n\nB. train_sub.txt DECISION TREE:")
     
@@ -90,9 +86,7 @@ if __name__ == "__main__":
     sub_evaluator.print_four_eval_metrics(sub_confusion)
 
     
-    ##############################################
-    #            TRAIN_NOISY.TXT                 #
-    ##############################################
+    ############## TRAIN_NOISY.TXT #################
     
     print("\n\nC. train_noisy.txt DECISION TREE:")
     
@@ -122,4 +116,71 @@ if __name__ == "__main__":
     
     print("\nEvaluation Macro Parameters:")
     noisy_evaluator.print_four_eval_metrics(noisy_confusion)
+
+
+    #######################################################################
+    #               ** QUESTION 3.3:  **
+    #######################################################################
+    print("\n TASK 3.6: Performing cross-validation...")
+    k = 10
+    cv = CrossValidator()
+    cross_validation_output = cv.run(full_dataset, k)
+    cv.print_evaluation_params(cross_validation_output[1])
+
+    #######################################################################
+    # ** QUESTION 3.4: EVALUATE MODEL TRAINED ON FULL DATASET  **
+    # ** BEST ACCURACY MODEL FROM A SUBSET (CROSS-VALIDATED)   **
+    #######################################################################
+    print("\n\nQUESTION 3.4: BEST PERFORMING CLASSIFIER FROM CROSS-VAL vs CLASSIFIER TRAINED ON FULL DATASET")
+    # get test labels
+    test_dataset = Dataset("data/test.txt")
+
+    # EVALUATION OF CLASSIFIER TRAINED ON FULL DATASET
+    predictions = full_classifier.predict(test_dataset.attributes)
+
+    # evaluation initializer
+    evaluator = Evaluator()
+
+    # build confusion matrix
+    confusion = evaluator.confusion_matrix(predictions, test_dataset.labels)
+
+    # get accuracy and append it to the array of accuracies
+    print("\nEvaluation Parameters (using test.txt) of tree trained on full dataset ...")
+    evaluator.print_four_eval_metrics(confusion)
+
+
+    # EVALUATION ON THE BEST ACCURACY MODEL (FROM CROSS-VALIDATION)
+    # choose the best classifier
+    best_acc_cross_valid_classifier = cv.get_tree_with_max_accuracy(cross_validation_output)
+
+    predictions = best_acc_cross_valid_classifier.predict(test_dataset.attributes)
+
+    # evaluation initializer
+    evaluator = Evaluator()
+
+    # build confusion matrix
+    confusion = evaluator.confusion_matrix(predictions, test_dataset.labels)
+
+    # get accuracy and append it to the array of accuracies
+    print("\nEvaluation Parameters on of the best performing tree on test.txt ...")
+    evaluator.print_four_eval_metrics(confusion)
+
+    #######################################################################
+    #         ** QUESTION 3.5: COMBINE PREDICTIONS OF 10 TREES **
+    #######################################################################
+    print("\n\nQUESTION 3.5: COMBINED PREDICTIONS OF CLASSIFIERS TRAINED ON SUBSET OF DATA")
+
+    # combine predictions from all 10 trees into one array called predictions
+    predictions_combined = [cross_validation_output[0][0].predict(test_dataset.attributes)]
+    for i in range(1, k):
+        predictions_combined = np.append(predictions_combined,
+                      [cross_validation_output[0][i].predict(test_dataset.attributes)], axis=0)
+
+    # get mode of those predictions across 10 trees
+    predictions_combined_mode = cv.mode_2d(predictions_combined)
+
+    print("\nEvaluation Parameters using combined predictions from 10 decision trees ...")
+    evaluator = Evaluator()
+    confusion = evaluator.confusion_matrix(predictions_combined_mode, test_dataset.labels)
+    evaluator.print_four_eval_metrics(confusion)
 

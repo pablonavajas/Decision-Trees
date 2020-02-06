@@ -7,6 +7,19 @@ from readData import Dataset
 validation = Dataset("data/validation.txt")
 test = Dataset("data/test.txt")
 
+#######################################################################
+#                       ** QUESTION 4.1: **                           #
+#######################################################################
+print("====================================================================")
+print("========================= QUESTION 4.1 =============================")
+print("====================================================================")
+
+#print(" \n====== TESTING OF train_full.txt CLASSIFIER on validation.txt ======")
+# validation = Dataset("data/validation.txt")
+# print("Pruning the Tree")
+# classifier.prune(validation.attributes, validation.labels)
+#
+# classifier.print_decision_tree(classifier.node)
 
 #######################################################################
 #           ** train_full.txt model on test.txt **
@@ -62,3 +75,11 @@ evaluator.print_four_eval_metrics(confusion)
 
 
 print("\n\n")
+
+
+#######################################################################
+#                       ** QUESTION 4.2: **                           #
+#######################################################################
+print("====================================================================")
+print("========================= QUESTION 4.2 =============================")
+print("====================================================================")
