@@ -49,7 +49,35 @@ and invoke the methods defined in ``classification.py`` and ``eval.py``.
 
 ### Instructions
 
-< Insert your own instructions here >
+####Importing the datasets
+File ``readData.py`` has been created to import the data from textual format into some numpy
+arrays containing labels and attributes, to be used for the training of the decision trees.
+
+
+#### Decision trees training and printing
+To perform the training and print out decision trees for all the datasets provided in 
+the ``\data`` directory, python files have been created with 
+filenames corresponding to the filename of the datasets
+(i.e. ``toy.py`` is the file to be ran to print out decision tree trained on ``toy.txt`` dataset).
+So overall there is ``toy.py``, ``simple1.py``, ``simple2.py`` and ``train_full.py`` which have
+been created to run the training and printing out of the decision trees on the corresponding datasets.
+
+#### Evaluation
+For evaluation part, file ``evaluation_q3.py`` should be executed to print out all the results
+for part 3 of the coursework. This file utilises the ``CrossValidator`` class to perform
+cross-validation for the latter section of part 3 of this coursework. The ``CrossValidator``
+class is located in a separate file called ``CrossValidator.py``.
+
+#### Pruning 
+For the pruning part of the coursework, file ``pruning_q4.py`` should be executed, which will
+print out all the results for this part.
+
+
+
+
+    
+
+
 
 
 
