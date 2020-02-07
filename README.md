@@ -49,7 +49,7 @@ and invoke the methods defined in ``classification.py`` and ``eval.py``.
 
 ### Instructions
 
-####Importing the datasets
+#### Importing the datasets
 File ``readData.py`` has been created to import the data from textual format into some numpy
 arrays containing labels and attributes, to be used for the training of the decision trees.
 
