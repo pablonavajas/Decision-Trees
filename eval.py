@@ -14,7 +14,6 @@
 
 import numpy as np
 
-
 class Evaluator(object):
     """ Class to perform evaluation
     """

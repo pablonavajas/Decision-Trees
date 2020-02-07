@@ -11,7 +11,6 @@ import numpy as np
 import math
 import eval
 
-
 class DecisionTreeClassifier(object):
     """
     A decision tree classifier
@@ -108,7 +107,6 @@ class DecisionTreeClassifier(object):
         #                 ** HELPER FUNCTIONS Q2 **
         #######################################################################
 
-    # def induce_decision_tree(self, x, y):
     def induce_decision_tree(self, x, y, dep=0):
         """
         Implementation of Algorithm 1 - Decision Tree Induction
@@ -129,8 +127,7 @@ class DecisionTreeClassifier(object):
                         info_gain=node.info_gain, depth=node.depth)
         else:
             # split the dataset into child datasets based on the attribute
-            # and split_point
-            # stored in the best node
+            # and split_point stored in the best node
             children_datasets = self.split_dataset(x, y, node)
 
             for child_dataset in children_datasets:
@@ -166,8 +163,7 @@ class DecisionTreeClassifier(object):
             x, y = self.sort(x, y, col)
 
             # Find possible splitting points and, for each, their information
-            # gain
-            # (can start from 1 as we need to split)
+            # gain (can start from 1 as we need to split)
             for row in range(1, row_size):
                 if x[row, col] != x[row - 1, col]:
                     # slice the labels into two child sets
@@ -283,7 +279,6 @@ class DecisionTreeClassifier(object):
         else:
             return node.label
 
-    # def print_decision_tree(self, node, max_depth = 10):
     def print_decision_tree(self, node, max_depth):
         """
         Used to print a text-based visualisation of a decision tree.
@@ -298,10 +293,8 @@ class DecisionTreeClassifier(object):
                           node.depth) + ")")
                 if node.child1.depth < max_depth + 1:
                     print(" " * 4 * (node.child1.depth), end="")
-                    # self.print_decision_tree(node.child1)
                     self.print_decision_tree(node.child1, max_depth)
                     print(" " * 4 * (node.child2.depth), end="")
-                    # self.print_decision_tree(node.child2)
                     self.print_decision_tree(node.child2, max_depth)
             else:
                 print("+---", "Leaf", node.label,

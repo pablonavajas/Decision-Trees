@@ -1,7 +1,5 @@
 ##############################################################################
-# CO395: Introduction to Machine Learning
-# Coursework 1 Train the model given in toy.txt
-# Prepared by: EPC
+# Train the model given in toy.txt
 ##############################################################################
 
 from classification import DecisionTreeClassifier

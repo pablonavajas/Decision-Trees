@@ -1,12 +1,8 @@
 ##############################################################################
-# CO395: Introduction to Machine Learning                                    #
-# Coursework 1 data loading code                                             #
-# Prepared by: EPC                                                           #
-# Task: 1.1                                                                  #
+# Dataset class to read in the attributes and labels from a file.            # 
 ##############################################################################
 
 import numpy as np
-
 
 class Dataset:
 

@@ -1,9 +1,3 @@
-##############################################################################
-# CO395: Introduction to Machine Learning
-# Coursework 1 Train the model given in train_full.txt
-# Prepared by: PNH
-##############################################################################
-
 import numpy as np
 from classification import DecisionTreeClassifier
 from eval import Evaluator

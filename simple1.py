@@ -1,9 +1,6 @@
 ##############################################################################
-# CO395: Introduction to Machine Learning
-# Coursework 1 Train the model given in simple1.txt
-# Prepared by: EPC
+# Train the model given in simple1.txt
 ##############################################################################
-
 
 from classification import DecisionTreeClassifier
 from readData import Dataset

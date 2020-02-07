@@ -2,7 +2,6 @@ import numpy as np
 from classification import DecisionTreeClassifier
 from eval import Evaluator
 
-
 class CrossValidator(object):
     """
     CrossValidator class contains the following:
