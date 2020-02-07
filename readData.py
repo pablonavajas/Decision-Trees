@@ -7,6 +7,7 @@
 
 import numpy as np
 
+
 class Dataset:
 
     def __init__(self, filename):
@@ -14,7 +15,6 @@ class Dataset:
         self.labels = self.import_data(filename)[1]
 
     def import_data(self, filename):
-
         data = open(filename, 'r').read()
 
         L = data.split('\n')[:-1]
@@ -27,7 +27,5 @@ class Dataset:
 
         L = np.array(L)
         J = np.array(J)
-        
-        return L,J
 
-
+        return L, J

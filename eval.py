@@ -14,6 +14,7 @@
 
 import numpy as np
 
+
 class Evaluator(object):
     """ Class to perform evaluation
     """
@@ -45,7 +46,8 @@ class Evaluator(object):
         if class_labels is None:
             class_labels = np.unique(annotation)
 
-        confusion = np.zeros((len(class_labels), len(class_labels)), dtype=np.int)
+        confusion = np.zeros((len(class_labels), len(class_labels)),
+                             dtype=np.int)
 
         #######################################################################
         #                 ** TASK 3.1: COMPLETE THIS METHOD **
@@ -53,7 +55,8 @@ class Evaluator(object):
 
         # validate inputs
         assert len(prediction) == len(annotation), \
-            "Number of labels in the predicted class not equal to number of labels in the ground truth class"
+            "Number of labels in the predicted class not equal to number of " \
+            "labels in the ground truth class"
 
         results = np.vstack((annotation, prediction)).T
 
@@ -66,12 +69,8 @@ class Evaluator(object):
             idx_int = int(idx[0])
             idx2_int = int(idx2[0])
 
-            # print('The test ' + str(i) + ' had label ' + results[i][0] + ' and prediction ' + results[i][1])
-            # print('Hence, it will be stored in row ' + str(idx_int) + ' col ' + str(idx2_int))
-
             confusion[idx_int][idx2_int] += 1
             i += 1
-
 
         return confusion
 
@@ -127,7 +126,7 @@ class Evaluator(object):
         n = len(confusion)
         for i in range(n):
             denominator = np.sum(confusion[0:, [i]])
-            if(denominator):
+            if (denominator):
                 p[i] = confusion[i][i] / denominator
             else:
                 p[i] = 0
@@ -217,7 +216,6 @@ class Evaluator(object):
             else:
                 f[i] = 0
 
-
         macro_f = np.average(f)
 
         return (f, macro_f)
@@ -236,7 +234,3 @@ class Evaluator(object):
         print(self.recall(confusion)[0])
         print("\nF1 Score :")
         print(self.f1_score(confusion)[0])
-
-
-
-

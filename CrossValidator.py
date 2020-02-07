@@ -1,4 +1,3 @@
-
 import numpy as np
 from classification import DecisionTreeClassifier
 from eval import Evaluator
@@ -59,7 +58,8 @@ class CrossValidator(object):
         returns k number of classifiers and an array with the evaluation
         metrics for the k number of classifiers
         evaluation metrics include accuracy, precision, recall and f1 score
-        as well as averages, standard deviations and maximum value for those metrics
+        as well as averages, standard deviations and maximum value for those
+        metrics
         """
 
         # validate k_fold input from the user
@@ -78,17 +78,23 @@ class CrossValidator(object):
         # randomly split the data into k subsets and get validation performance
         for fold in range(k_folds):
 
-            validation_attributes, train_attributes = self.split_dataset(attributes, k_folds, fold)
-            validation_labels, train_labels = self.split_dataset(labels, k_folds, fold)
+            validation_attributes, train_attributes = self.split_dataset(
+                attributes, k_folds, fold)
+            validation_labels, train_labels = self.split_dataset(labels,
+                                                                 k_folds, fold)
 
-            classifier, eval_params = self.run_evaluation(validation_attributes, validation_labels,
-                                                          train_attributes, train_labels, np.unique(labels))
+            classifier, eval_params = self.run_evaluation(validation_attributes,
+                                                          validation_labels,
+                                                          train_attributes,
+                                                          train_labels,
+                                                          np.unique(labels))
 
             if fold == 0:
                 eval_data_frame = eval_params
                 decision_trees = classifier
             else:
-                eval_data_frame = np.append(eval_data_frame, eval_params, axis=0)
+                eval_data_frame = np.append(eval_data_frame, eval_params,
+                                            axis=0)
                 decision_trees = np.append(decision_trees, classifier)
 
         av = np.mean(eval_data_frame, axis=0)
@@ -108,7 +114,8 @@ class CrossValidator(object):
     def run_evaluation(self, validation_attributes, validation_labels,
                        train_attributes, train_labels, unique_labels):
         """
-        runs the evaluation and returns the classifier and evaluation parameters back
+        runs the evaluation and returns the classifier and evaluation
+        parameters back
         """
 
         # training the decision tree
@@ -120,17 +127,18 @@ class CrossValidator(object):
 
         # evaluation initialiser
         evaluator = Evaluator()
-        classes = np.unique(unique_labels);
 
         # build confusion matrix
-        confusion = evaluator.confusion_matrix(predictions, validation_labels, classes)
+        confusion = evaluator.confusion_matrix(predictions, validation_labels,
+                                               unique_labels)
 
         # get accuracy and append it to the array of accuracies
         accuracy = evaluator.accuracy(confusion)
         p, macro_p = evaluator.precision(confusion)
         r, macro_r = evaluator.recall(confusion)
         f, macro_f = evaluator.f1_score(confusion)
-        eval_params = np.array([[accuracy, macro_p, macro_r, macro_f]], dtype=float)
+        eval_params = np.array([[accuracy, macro_p, macro_r, macro_f]],
+                               dtype=float)
 
         return classifier, eval_params
 
@@ -155,8 +163,10 @@ class CrossValidator(object):
             else:
                 row_label = "Max Value      "
 
-            print(" %s   %.3f     %.3f      %.3f   %.3f" % (row_label, eval_data_frame[row][0],
-                     eval_data_frame[row][1], eval_data_frame[row][2], eval_data_frame[row][3]))
+            print(" %s   %.3f     %.3f      %.3f   %.3f" % (
+                row_label, eval_data_frame[row][0],
+                eval_data_frame[row][1], eval_data_frame[row][2],
+                eval_data_frame[row][3]))
 
     def mode_2d(self, array_n_x_k):
         """ get an array of mode values for all columns of array (n x k) """
@@ -164,8 +174,8 @@ class CrossValidator(object):
         mode_array = np.empty(0)
         for i in range(k):
             value, count = np.unique(array_n_x_k[:, i], return_counts=True)
-            indices = (-count).argsort() #minus for descending order
-            value = value[indices]       #rearrange in descending order of count
+            indices = (-count).argsort()  # minus for descending order
+            value = value[indices]  # rearrange in descending order of count
             mode_array = np.append(mode_array, value[0])
         return mode_array
 
