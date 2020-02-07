@@ -70,7 +70,8 @@ class is located in a separate file called ``CrossValidator.py``.
 
 #### Pruning 
 For the pruning part of the coursework, file ``pruning_q4.py`` should be executed, which will
-print out all the results for this part.
+print out all the results for this part. This utilises the ``prune`` function from inside the ``classification.py``
+file.
 
 
 
