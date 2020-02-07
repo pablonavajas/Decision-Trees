@@ -269,7 +269,8 @@ class DecisionTreeClassifier(object):
         else:
             return node.label
 
-    def print_decision_tree(self, node, max_depth=10):
+    #def print_decision_tree(self, node, max_depth = 10):
+    def print_decision_tree(self, node, max_depth):
         """
         Used to print a text-based visualisation of a decision tree.
         """
@@ -280,9 +281,11 @@ class DecisionTreeClassifier(object):
                     + str(node.dictionary) + " and Depth = " + str(node.depth) + ")")
                 if node.child1.depth < max_depth+1:
                     print(" "*4*(node.child1.depth), end = "")
-                    self.print_decision_tree(node.child1)
+                    #self.print_decision_tree(node.child1)
+                    self.print_decision_tree(node.child1, max_depth)
                     print(" "*4*(node.child2.depth), end = "")
-                    self.print_decision_tree(node.child2)
+                    #self.print_decision_tree(node.child2)
+                    self.print_decision_tree(node.child2, max_depth)
             else:
                 print("+---", "Leaf", node.label, "(IG = " + str(round(node.info_gain, 4)) + 
                     " and Class Distribution = " + str(node.dictionary) + " and Depth = " + str(node.depth) + ")") 

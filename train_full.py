@@ -26,7 +26,7 @@ if __name__ == "__main__":
     classifier = classifier.train(dataset.attributes, dataset.labels)
 
     print("Visualisation of the Decision Tree ...")
-    classifier.print_decision_tree(classifier.node)
+    classifier.print_decision_tree(classifier.node, max_depth = 4)
 
 
 
