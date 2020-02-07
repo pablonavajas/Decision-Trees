@@ -32,9 +32,13 @@ predictions = classifier_full.predict(test.attributes)
 confusion = evaluator.confusion_matrix(predictions, test.labels)
 evaluator.print_four_eval_metrics(confusion)
 
+tree_max_depth = classifier_full.max_depth
+
 print("\nPruning the Tree...")
 pruned_classifier_full = classifier_full.prune(validation.attributes,
                                                validation.labels)
+
+pruned_tree_max_depth = pruned_classifier_full.max_depth
 
 print("\nEvaluation of train_full.txt model on test.txt AFTER pruning: ")
 predictions = pruned_classifier_full.predict(test.attributes)
@@ -76,3 +80,11 @@ print("\n\n")
 print("====================================================================")
 print("========================= QUESTION 4.2 =============================")
 print("====================================================================")
+
+print("The maximal depth of the un-pruned tree is: ")
+print(tree_max_depth)
+
+print("\nThe maximal depth of the pruned tree is:")
+print(pruned_tree_max_depth)
+
+print("\n")

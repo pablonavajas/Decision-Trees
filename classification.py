@@ -32,7 +32,8 @@ class DecisionTreeClassifier(object):
     def __init__(self):
         self.is_trained = False
         self.node = None
-
+        self.max_depth = 0
+        
     def train(self, x, y):
         """ Constructs a decision tree classifier from data
 
@@ -136,6 +137,9 @@ class DecisionTreeClassifier(object):
                                                        dep + 1)
                 node.add_child(child_node)
 
+                if child_node.depth > self.max_depth:
+                    self.max_depth = child_node.depth
+                
             return node
 
     def find_best_node(self, x, y, depth):
@@ -313,6 +317,9 @@ class DecisionTreeClassifier(object):
         """
         A function that is used to prune a decision tree.
         """
+        # Re-evaluate depth:
+        self.max_depth = 0
+        
         self.prune_helper(self.node, x, y)
         return self
 
@@ -356,6 +363,10 @@ class DecisionTreeClassifier(object):
 
                 post_accuracy = self.tree_accuracy(x, y)
 
+                # Re-evaluate tree depth:
+                if node.depth > self.max_depth:
+                    self.max_depth = node.depth
+                
                 if post_accuracy >= pre_accuracy:
                     return True
                 # if accuracy not improved
@@ -365,6 +376,9 @@ class DecisionTreeClassifier(object):
                     node.label = None
                     node.attribute = store[0]
                     node.split_point = store[1]
+
+                    if node.depth + 1 > self.max_depth:
+                        self.max_depth = node.depth + 1
 
             return False
 
