@@ -28,5 +28,3 @@ if __name__ == "__main__":
     print("Visualisation of the Decision Tree ...")
     classifier.print_decision_tree(classifier.node, max_depth = 4)
 
-
-

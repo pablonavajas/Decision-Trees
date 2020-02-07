@@ -59,7 +59,8 @@ class CrossValidator(object):
         returns k number of classifiers and an array with the evaluation
         metrics for the k number of classifiers
         evaluation metrics include accuracy, precision, recall and f1 score
-        as well as averages, standard deviations and maximum value for those metrics
+        as well as averages, standard deviations and 
+        maximum value for those metrics
         """
 
         # validate k_fold input from the user
@@ -78,11 +79,14 @@ class CrossValidator(object):
         # randomly split the data into k subsets and get validation performance
         for fold in range(k_folds):
 
-            validation_attributes, train_attributes = self.split_dataset(attributes, k_folds, fold)
-            validation_labels, train_labels = self.split_dataset(labels, k_folds, fold)
+            validation_attributes, train_attributes = 
+                self.split_dataset(attributes, k_folds, fold)
+            validation_labels, train_labels = 
+                self.split_dataset(labels, k_folds, fold)
 
-            classifier, eval_params = self.run_evaluation(validation_attributes, validation_labels,
-                                                          train_attributes, train_labels, np.unique(labels))
+            classifier, eval_params = 
+                self.run_evaluation(validation_attributes, validation_labels,
+                    train_attributes, train_labels, np.unique(labels))
 
             if fold == 0:
                 eval_data_frame = eval_params
@@ -108,7 +112,8 @@ class CrossValidator(object):
     def run_evaluation(self, validation_attributes, validation_labels,
                        train_attributes, train_labels, unique_labels):
         """
-        runs the evaluation and returns the classifier and evaluation parameters back
+        runs the evaluation and returns the 
+        classifier and evaluation parameters back
         """
 
         # training the decision tree

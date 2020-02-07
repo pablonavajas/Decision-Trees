@@ -127,24 +127,26 @@ class DecisionTreeClassifier(object):
             return Node(label = l, dictionary = node.dictionary, 
                     info_gain = node.info_gain, depth = node.depth)
         else:
-            #split the dataset into child datasets based on the attribute and split_point
-            #stored in the best node
+            #split the dataset into child datasets based 
+            #on the attribute and split_point stored in the best node
             children_datasets = self.split_dataset(x, y, node)
 
             for child_dataset in children_datasets:
-                child_node = self.induce_decision_tree(child_dataset[0], child_dataset[1], dep + 1)
+                child_node = self.induce_decision_tree(child_dataset[0], 
+                                child_dataset[1], dep + 1)
                 node.add_child(child_node)
 
             return node
 
     def find_best_node(self, x, y, depth):
         """
-        Returns the best node based on x: an NxK NumPy array representing N training
-        instances of K attributes and y: an N-dim NumPy array containing the class label
-        for each instance.
+        Returns the best node based on x: an NxK NumPy array representing N 
+        training instances of K attributes and y: an N-dim NumPy array 
+        containing the class label for each instance.
         """
 
-        #initialise variables which store max info gain and the attribute and split point
+        #initialise variables which store max info gain 
+        #and the attribute and split point
         max_information_gain = 0
         attribute = None
         split_point = None
@@ -158,10 +160,11 @@ class DecisionTreeClassifier(object):
             #sort attributes and labels based on column
             x, y = self.sort(x, y, col)
 
-            #Find possible splitting points and, for each, their information gain
-            #(can start from 1 as we need to split)
+            #Find possible splitting points and, for each, their information 
+            #gain (can start from 1 as we need to split)
             for row in range(1,row_size):
                 if x[row,col] != x[row-1,col]:
+
                     #slice the labels into two child sets
                     children = [child1, child2] = [y[:row], y[row:]]
 
@@ -175,19 +178,22 @@ class DecisionTreeClassifier(object):
                         attribute = col
                         split_point = x[row,col]
 
-        #create a dictionary of unique labels and their counts to be stored in the node
+        #create a dictionary of unique labels 
+        #and their counts to be stored in the node
         unique, counts = np.unique(y, return_counts = True)
         dictionary = dict(zip(unique, counts))
 
-        #create node with attribute and value of max info_gain, the dictionary, and its depth
-        node = Node(attribute, split_point, max_information_gain, dictionary, depth)
+        #create node with attribute and value of 
+        #max info_gain, the dictionary, and its depth
+        node = Node(attribute, split_point, max_information_gain, 
+                dictionary, depth)
 
         return node
 
     def sort(self, x, y, column):
         """
-        Returns the array of attributes and the array of labels based on the column
-        to be sorted.
+        Returns the array of attributes and the array of labels 
+        based on the column to be sorted.
         """
 
         indices = x[:,column].argsort()
@@ -198,8 +204,8 @@ class DecisionTreeClassifier(object):
 
     def information_gain(self, parent, children):
         """
-        Calculates the information gain for a set of parent class labels, and a list
-        of child sets (each set contains labels).
+        Calculates the information gain for a set of parent class labels,
+        and a list of child sets (each set contains labels).
         """
 
         #total number of samples in the parent
@@ -208,8 +214,10 @@ class DecisionTreeClassifier(object):
         #calculate the entropy of the parent
         h_parent = self.entropy(parent)
 
-        #calculate the terms that when summed make up the second term in calculating IG
-        h_children = [((child.shape)[0])*(1/N)*self.entropy(child) for child in children]
+        #calculate the terms that when summed 
+        #make up the second term in calculating IG
+        h_children = [((child.shape)[0])*(1/N)*self.entropy(child) 
+                            for child in children]
 
         h_bar_children = sum(h_children)
 
@@ -238,7 +246,8 @@ class DecisionTreeClassifier(object):
     def split_dataset(self, x, y, node):
         """
         Splits the dataset into child sets based on the node condition.
-        Returns a list of the child sets (each child is a list of attributes and labels)
+        Returns a list of the child sets 
+        (each child is a list of attributes and labels)
         """
 
         #Sort the attribute matrix and label matrix based on node.attribute
@@ -269,26 +278,30 @@ class DecisionTreeClassifier(object):
         else:
             return node.label
 
-    #def print_decision_tree(self, node, max_depth = 10):
     def print_decision_tree(self, node, max_depth):
         """
         Used to print a text-based visualisation of a decision tree.
         """
         if node.depth <= max_depth:
             if node.attribute != None:
-                print("+---", "Attribute_" + str(node.attribute) + " < " + str(node.split_point), 
-                    "(IG = " + str(round(node.info_gain, 4)) + " and Class Distribution = " 
-                    + str(node.dictionary) + " and Depth = " + str(node.depth) + ")")
+                print("+---", "Attribute_" + str(node.attribute) 
+                        + " < " + str(node.split_point), "(IG = " 
+                        + str(round(node.info_gain, 4)) 
+                        + " and Class Distribution = " 
+                        + str(node.dictionary) + " and Depth = " 
+                        + str(node.depth) + ")")
+
                 if node.child1.depth < max_depth+1:
                     print(" "*4*(node.child1.depth), end = "")
-                    #self.print_decision_tree(node.child1)
                     self.print_decision_tree(node.child1, max_depth)
                     print(" "*4*(node.child2.depth), end = "")
-                    #self.print_decision_tree(node.child2)
                     self.print_decision_tree(node.child2, max_depth)
+
             else:
-                print("+---", "Leaf", node.label, "(IG = " + str(round(node.info_gain, 4)) + 
-                    " and Class Distribution = " + str(node.dictionary) + " and Depth = " + str(node.depth) + ")") 
+                print("+---", "Leaf", node.label, 
+                        "(IG = " + str(round(node.info_gain, 4)) 
+                        + " and Class Distribution = " + str(node.dictionary) 
+                        + " and Depth = " + str(node.depth) + ")") 
 
         return self
 
@@ -364,21 +377,26 @@ class DecisionTreeClassifier(object):
 class Node:
     """
     A Node object has the following data members:
-        - the attribute and split point that results in the most informative split for
-        some dataset (set to None if the Node is meant to contain only a label)
+        - the attribute and split point that results in the most 
+        informative split for some dataset (set to None if the 
+        Node is meant to contain only a label)
         - the information gain that is gained by splitting the dataset
         by the attribute and split point
         - a dictionary, where the keys are labels, and the values are
         the counts of these labels in an array
         - the depth of a node in a decision tree.
-        - the label (set to None by default if the Node is meant to hold an attribute 
-        and split_point)
+        - the label (set to None by default if the Node is meant to hold 
+        an attribute and split_point)
         - the two child nodes that are pointed to by the parent (binary tree)
 
-    It also has the add_child() method, which associates a child node with its parent
+    It also has the add_child() method, 
+    which associates a child node with its parent
     """
 
-    def __init__(self, attribute = None, split_point = None, info_gain = None, dictionary = None, depth = None, label = None, child1 = None, child2 = None):
+    def __init__(self, attribute = None, split_point = None, info_gain = None,
+            dictionary = None, depth = None, label = None, 
+            child1 = None, child2 = None):
+
         self.attribute = attribute
         self.split_point = split_point
         self.info_gain = info_gain

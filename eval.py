@@ -53,7 +53,8 @@ class Evaluator(object):
 
         # validate inputs
         assert len(prediction) == len(annotation), \
-            "Number of labels in the predicted class not equal to number of labels in the ground truth class"
+            "Number of labels in the predicted class not equal 
+                to number of labels in the ground truth class"
 
         results = np.vstack((annotation, prediction)).T
 
@@ -66,12 +67,8 @@ class Evaluator(object):
             idx_int = int(idx[0])
             idx2_int = int(idx2[0])
 
-            # print('The test ' + str(i) + ' had label ' + results[i][0] + ' and prediction ' + results[i][1])
-            # print('Hence, it will be stored in row ' + str(idx_int) + ' col ' + str(idx2_int))
-
             confusion[idx_int][idx2_int] += 1
             i += 1
-
 
         return confusion
 
