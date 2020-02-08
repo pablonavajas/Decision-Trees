@@ -57,6 +57,8 @@ classifier_noisy = DecisionTreeClassifier()
 classifier_noisy = classifier_noisy.train(train_noisy.attributes,
                                           train_noisy.labels)
 
+noisy_tree_max_depth = classifier_noisy.max_depth
+
 print("\nEvaluation of train_noisy.txt on test.txt BEFORE pruning: ")
 predictions = classifier_noisy.predict(test.attributes)
 evaluator = Evaluator()
@@ -66,6 +68,8 @@ evaluator.print_four_eval_metrics(confusion)
 print("\nPruning the Tree...")
 pruned_classifier_noisy = classifier_noisy.prune(validation.attributes,
                                                  validation.labels)
+
+pruned_noisy_max_depth = pruned_classifier_noisy.max_depth
 
 print("\nEvaluation of train_noisy.txt model on test.txt AFTER pruning: ")
 predictions = pruned_classifier_noisy.predict(test.attributes)
@@ -81,10 +85,20 @@ print("====================================================================")
 print("========================= QUESTION 4.2 =============================")
 print("====================================================================")
 
-print("The maximal depth of the un-pruned tree is: ")
+print("Model trained using \"train_full.txt\"")
+print("The maximal depth of the un-pruned tree is:")
 print(tree_max_depth)
 
 print("\nThe maximal depth of the pruned tree is:")
 print(pruned_tree_max_depth)
+
+print("\n")
+
+print("Model trained using \"train_noisy.txt\"")
+print("The maximal depth of the un-pruned tree is:")
+print(noisy_tree_max_depth)
+
+print("The maximal depth of the pruned tree is:")
+print(pruned_noisy_max_depth)
 
 print("\n")
