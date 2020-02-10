@@ -61,6 +61,9 @@ filenames corresponding to the filename of the datasets
 (i.e. ``toy.py`` is the file to be ran to print out decision tree trained on ``toy.txt`` dataset).
 So overall there is ``toy.py``, ``simple1.py``, ``simple2.py`` and ``train_full.py`` which have
 been created to run the training and printing out of the decision trees on the corresponding datasets.
+To keep track of the maximum depth of the tree a new instance object was
+created: self.max_depth. This object was re-evaluated when calling the
+pruning method.
 
 #### Evaluation
 For evaluation part, file ``evaluation_q3.py`` should be executed to print out all the results
